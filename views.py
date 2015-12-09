@@ -1,5 +1,5 @@
 __author__ = 'Kyle Dumouchelle'
-#CPSC 409, 12/04/2015
+#CPSC409, 12/04/2015
 
 #controller
 
@@ -14,7 +14,7 @@ app.config.from_object("config")
 
 #function used for connecting to databse
 def connnect_db():
-    return sqlite3.connect(app.config['DATABASE'])
+    return sqlite3.connect(app.config['DATABASE_PATH'])
 
 def login_required(test):
     @wraps(test)
@@ -22,7 +22,7 @@ def login_required(test):
         if 'logged_in' in session:
             return test(*args, **kwargs)
         else:
-            flash('You need to log in first.')
+            flash('Login Required')
             return redirect(url_for('login'))
     return wrap
 
@@ -35,44 +35,42 @@ def login():
             error = 'Invalid Username and/or Password.'
         else:
             session['logged_in'] = True
+            flash('Logged In')
             return redirect(url_for('main'))
-    return render_template('login.html', error = error)
+    return render_template('login.html', error=error)
 
-@app.route('/main')
-@login_required
-def main():
-    g.db = connnect_db()
-    cur = g.db.execute('SELECT * FROM posts')
-    posts = [dict(title=row[0], post=row[1])for row in cur.fetchall()]
-    g.db.close()
-    return render_template('main.html', posts=posts)
+# @app.route('/tasks')
+# @login_required
+# def main():
+#     g.db = connnect_db()
+#     cur = g.db.execute('SELECT * FROM posts')
+#     posts = [dict(title=row[0], post=row[1])for row in cur.fetchall()]
+#     g.db.close()
+#     return render_template('main.html', posts=posts)
 
-@app.route('/add', methods=['POST'])
-@login_required
-def add():
-    title = request.form['title']
-    post = request.form['post']
-
-     #if either title or post are empty
-    if not title or not post:
-        flash("Fill out all fields and try again.")
-        return redirect(url_for('main'))
-
-    else:
-        g.db = connnect_db()
-        g.db.execute('INSERT INTO posts (title, post) VALUES (?, ?)',
-                     [request.form['title'], request.form['post']])
-        g.db.commit()
-        g.db.close()
-        flash('New entry posted')
-        return redirect(url_for('main'))
+# @app.route('/add', methods=['POST'])
+# @login_required
+# def add():
+#     title = request.form['title']
+#     post = request.form['post']
+#
+#      #if either title or post are empty
+#     if not title or not post:
+#         flash("Fill out all fields and try again.")
+#         return redirect(url_for('main'))
+#
+#     else:
+#         g.db = connnect_db()
+#         g.db.execute('INSERT INTO posts (title, post) VALUES (?, ?)',
+#                      [request.form['title'], request.form['post']])
+#         g.db.commit()
+#         g.db.close()
+#         flash('New entry posted')
+#         return redirect(url_for('main'))
 
 @app.route('/logout')
 def logout():
     #returns session key to default and returns to login page
     session.pop('logged_in', None)
-    flash('You were logged out')
+    flash('Logged Out')
     return redirect(url_for('login'))
-
-if __name__ == '__main__':
-    app.run(debug=True)

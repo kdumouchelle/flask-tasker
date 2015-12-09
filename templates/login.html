@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block content %}
+    <h1>Welcome to FlaskrTaskr</h1>
+    <h3>Log in to view task list</h3>
+
+    <form method="post" action="/">
+        <span>
+            <label for="username">Username:</label>
+            <input type="text" name="username" value="{{ request.form.username }}">
+        </span>
+        <span>
+            <label for="password">Password:</label>
+            <input type="password" name="password" value="{{ request.form.password }}">
+        </span>
+        <input type="submit" value="Login" name class="submit">
+    </form>
+
+    <p id="note"><em>The username & password is no longer admin. What are you now?</em></p>
+{% endblock %}

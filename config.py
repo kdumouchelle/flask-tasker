@@ -1,8 +1,9 @@
 __author__ = 'Kyle Dumouchelle'
+#CPSC409, 12/8/2015
 import os
 
-#grab the folder where this script lives
-dir = os.path.abspath(os.path.path.dirname(__file__))
+#obtain folder where this script resides
+dir = os.path.abspath(os.path.dirname(__file__))
 DATABASE="taskr.db"
 USERNAME = 'kid'
 PASSWORD = 'squid'
