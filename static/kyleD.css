@@ -25,7 +25,7 @@ h2
 	color: #004499;
 	font-family: Verdana, Arial;
 }
-label
+form.login label
 {
 	display: inline-block;
 	float: left;
@@ -33,7 +33,7 @@ label
 	width: 80px;
 	text-align: left;
 }
-input
+form.login input
 {
 	display: inline-block;
 	float: left;
